@@ -3,6 +3,8 @@ import { FormMessage, Message } from "@/components/form-message";
 import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
 export default async function Login(props: { searchParams: Promise<Message> }) {
@@ -21,12 +23,6 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
         <Input name="email" placeholder="you@example.com" required />
         <div className="flex justify-between items-center">
           <Label htmlFor="password">Password</Label>
-          <Link
-            className="text-xs text-foreground underline"
-            href="/forgot-password"
-          >
-            Forgot Password?
-          </Link>
         </div>
         <Input
           type="password"
@@ -34,6 +30,16 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           placeholder="Your password"
           required
         />
+        <div className="flex justify-between items-center">
+          <Label htmlFor="role">Are you an admin?</Label>
+          <Switch name="role" />
+        </div>
+        <Link
+          className="text-xs text-foreground underline"
+          href="/forgot-password"
+        >
+          Forgot Password?
+        </Link>
         <SubmitButton pendingText="Signing In..." formAction={signInAction}>
           Sign in
         </SubmitButton>

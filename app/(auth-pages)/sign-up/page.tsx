@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { SmtpMessage } from "../smtp-message";
+import { Switch } from "@/components/ui/switch";
 
 export default async function Signup(props: {
   searchParams: Promise<Message>;
@@ -39,13 +40,16 @@ export default async function Signup(props: {
             minLength={6}
             required
           />
+          <div className="flex justify-between items-center">
+            <Label htmlFor="role">Sign up as admin</Label>
+            <Switch name="role" />
+          </div>
           <SubmitButton formAction={signUpAction} pendingText="Signing up...">
             Sign up
           </SubmitButton>
           <FormMessage message={searchParams} />
         </div>
       </form>
-      <SmtpMessage />
     </>
   );
 }
