@@ -5,9 +5,6 @@ import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function Home() {
-  const supabase = await createClient();
-  const { data: users } = await supabase.from("Users").select();
-  console.log(users);
   return (
     <>
       <Hero />
