@@ -4,6 +4,8 @@ import { ViewPayments } from "@/components/ViewPayments";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import UploadDocumentForm from "@/components/UploadDocument";
+import { ViewDocuments } from "@/components/ViewDocuments";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -22,8 +24,14 @@ export default async function Home() {
             <TabsTrigger value="create">
               <Hero text="Create A Payment" />
             </TabsTrigger>
+            <TabsTrigger value="upload">
+              <Hero text="Upload a file" />
+            </TabsTrigger>
             <TabsTrigger value="list">
               <Hero text="View Payments" />
+            </TabsTrigger>
+            <TabsTrigger value="documents">
+              <Hero text="View Documents" />
             </TabsTrigger>
           </TabsList>
           <TabsContent value="create">
@@ -31,6 +39,12 @@ export default async function Home() {
           </TabsContent>
           <TabsContent value="list">
             <ViewPayments />
+          </TabsContent>
+          <TabsContent value="upload">
+            <UploadDocumentForm />
+          </TabsContent>
+          <TabsContent value="documents">
+            <ViewDocuments />
           </TabsContent>
         </Tabs>
       </main>

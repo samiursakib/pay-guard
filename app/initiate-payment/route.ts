@@ -5,7 +5,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 export async function GET(request: NextRequest) {
   const title = request.nextUrl.searchParams.get("title");
   const amount = request.nextUrl.searchParams.get("amount");
-  console.log(title, amount);
   try {
     const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
     const session = await stripe.checkout.sessions.create({

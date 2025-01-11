@@ -19,7 +19,6 @@ export const createPaymentHistory = async (title: string, amount: number) => {
   if (error) {
     console.error(error);
   } else {
-    console.log(data);
     return data?.[0].id;
   }
 };
@@ -27,14 +26,11 @@ export const createPaymentHistory = async (title: string, amount: number) => {
 export const updatePaymentStatus = async (status: string) => {
   const supabase = await createClient();
   const lastPayment = (await cookies()).get("last_payment")?.value;
-  console.log(lastPayment);
   const { data, error } = await supabase
     .from("payments")
     .update({ status })
     .eq("id", lastPayment);
   if (error) {
     console.error(error);
-  } else {
-    console.log(data);
   }
 };
