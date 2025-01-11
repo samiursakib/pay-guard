@@ -2,8 +2,10 @@
 
 import { encodedRedirect, signInWithRole } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { createPaymentHistory } from "./services/services";
+import { NextResponse } from "next/server";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -55,7 +57,7 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
-  return redirect("/protected");
+  return redirect("/");
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
@@ -133,4 +135,31 @@ export const signOutAction = async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
   return redirect("/sign-in");
+};
+
+export const initiatePaymentAction = async (formData: FormData) => {
+  const title = formData.get("title") as string;
+  const amount = formData.get("amount") as unknown as number;
+  const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: "bdt",
+          product_data: {
+            name: title,
+          },
+          unit_amount: Number(amount) * 100,
+        },
+        quantity: 1,
+      },
+    ],
+    payment_method_types: ["card"],
+    mode: "payment",
+    success_url: `${process.env.NEXT_PUBLIC_URL}/success`,
+    cancel_url: `${process.env.NEXT_PUBLIC_URL}/cancel`,
+  });
+  const lastPaymentUUID = await createPaymentHistory(title, amount);
+  (await cookies()).set("last_payment", lastPaymentUUID);
+  return redirect(session.url);
 };
