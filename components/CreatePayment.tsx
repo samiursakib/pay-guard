@@ -23,7 +23,7 @@ export default function CreatePayment() {
         />
       </div>
       <SubmitButton
-        pendingText="Creating payment..."
+        pendingText="Creating..."
         formAction={initiatePaymentAction}
       >
         Create

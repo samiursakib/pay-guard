@@ -22,7 +22,6 @@ export async function signInWithRole(
   role: string,
   supabase: SupabaseClient
 ) {
-  // Step 1: Sign in the user
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -34,22 +33,19 @@ export async function signInWithRole(
     return { data: null, error: new Error("Error signing in") };
   }
 
-  // Step 2: Fetch the user's role from the database
   const { data: userRoleData, error: roleError } = await supabase
-    .from("users") // Adjust this to your users table name
+    .from("users")
     .select("role")
-    .eq("id", data.user.id) // Match the authenticated user ID
-    .single(); // Fetch a single record
+    .eq("id", data.user.id)
+    .single();
 
   if (roleError) {
     console.error("Error fetching user role:", roleError);
     return { data: null, error: new Error("Error fetching user role") };
   }
 
-  // Step 3: Check if the role matches
   if (userRoleData.role !== role) {
     console.error("Role mismatch: Access denied");
-    // Optional: Sign out the user if role is incorrect
     await supabase.auth.signOut();
     return { data: null, error: new Error("Role mismatch: Access denied") };
   }

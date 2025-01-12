@@ -163,3 +163,8 @@ export const initiatePaymentAction = async (formData: FormData) => {
   (await cookies()).set("last_payment", lastPaymentUUID);
   return redirect(session.url);
 };
+
+export const uploadFileAction = async (formData: FormData) => {
+  const file = formData.get("file");
+  console.log(file, Object.entries(formData));
+};
