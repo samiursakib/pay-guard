@@ -16,17 +16,24 @@ export default async function Home() {
   if (!user) {
     return redirect("/sign-in");
   }
+  const isAdmin = user.user_metadata.role === "admin";
   return (
     <>
       <main className="flex flex-col px-4">
-        <Tabs defaultValue="create" className="w-full">
+        <Tabs defaultValue={isAdmin ? "list" : "create"} className="w-full">
           <TabsList>
-            <TabsTrigger value="create">
-              <Hero text="Create A Payment" />
-            </TabsTrigger>
-            <TabsTrigger value="upload">
-              <Hero text="Upload a file" />
-            </TabsTrigger>
+            {isAdmin ? (
+              <></>
+            ) : (
+              <>
+                <TabsTrigger value="create">
+                  <Hero text="Create A Payment" />
+                </TabsTrigger>
+                <TabsTrigger value="upload">
+                  <Hero text="Upload a file" />
+                </TabsTrigger>
+              </>
+            )}
             <TabsTrigger value="list">
               <Hero text="View Payments" />
             </TabsTrigger>
